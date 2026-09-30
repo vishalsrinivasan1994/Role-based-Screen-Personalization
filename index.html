@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       'var payload=Object.assign({submittedAt:new Date().toISOString()},answers);' +
       'var body=JSON.stringify(payload);' +
       'if(navigator.sendBeacon){try{if(navigator.sendBeacon(endpoint,body)){return Promise.resolve({queued:true,transport:"beacon"});}}catch(error){}}' +
-      'return fetch(endpoint,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=UTF-8"},body:body}).then(function(){return {queued:true,transport:"fetch"};}).catch(function(){return {queued:true,transport:"fetch-opaque"};});' +
+      'return fetch(endpoint,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=UTF-8"},body:body}).then(function(){return {queued:true,transport:"fetch"};});' +
       '};window.__powerAutomateSubmit=window.submitFeedback;}' +
       'setTimeout(install,0);' +
       'if(document.readyState==="complete"){install();}else{window.addEventListener("load",install,{once:true});}' +
