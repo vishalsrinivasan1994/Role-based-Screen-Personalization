@@ -313,7 +313,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       'function install(){window.submitFeedback=function(answers){' +
       'if(endpoint.indexOf("PASTE_")===0){return Promise.reject(new Error("Power Automate URL is not configured."));}' +
       'var payload=Object.assign({submittedAt:new Date().toISOString()},answers);' +
-      'return fetch(endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=UTF-8"},body:JSON.stringify(payload)});' +
+      'var body=JSON.stringify(payload);' +
+      'if(navigator.sendBeacon){try{if(navigator.sendBeacon(endpoint,body)){return Promise.resolve({queued:true,transport:"beacon"});}}catch(error){}}' +
+      'return fetch(endpoint,{method:"POST",mode:"no-cors",keepalive:true,headers:{"Content-Type":"text/plain;charset=UTF-8"},body:body}).then(function(){return {queued:true,transport:"fetch"};});' +
       '};window.__powerAutomateSubmit=window.submitFeedback;}' +
       'setTimeout(install,0);' +
       'if(document.readyState==="complete"){install();}else{window.addEventListener("load",install,{once:true});}' +
@@ -326,7 +328,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     );
     template = template.replace(
       'Copied — please paste it into your reply.',
-      'Feedback sent successfully.'
+      'Feedback queued for submission.'
+    );
+    template = template.replace(
+      'Your browser could not copy automatically. Please return and try again.',
+      'Feedback could not be queued. Please return and try again.'
     );
     template = template.replace(
       '<div style="width: 100%; max-width: min(940px, 100%);">',
